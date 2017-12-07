@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "test": [
+                "src/test"
+            ],
+            "test/*": [
+                "src/test/*"
+            ] // This mapping is relative to "baseUrl"
+        }
+    }
+}
