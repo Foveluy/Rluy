@@ -38,7 +38,6 @@ export class Carousel extends Component {
         const ary = new Array(speed).fill(needToMove / speed);
         requestAnimationFrame(() => this.animation(ary, currentIndex));
     }
-
     animation = (ary, currentIndex) => {
         if (ary.length <= 0) {
             if (currentIndex < -this.childCount) {
