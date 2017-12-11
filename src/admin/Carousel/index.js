@@ -66,7 +66,6 @@ export class Carousel extends Component {
     }
 
     renderCarouselItem = () => {
-        const { currentIndex } = this.state;
         return React.Children.map(this.props.children, (child, index) => {
             return (
                 <div
@@ -129,9 +128,6 @@ export class Carousel extends Component {
     }
 }
 
-function getPosition(e) {
-
-}
 
 const childCSS = {
     color: 'white',

@@ -38,6 +38,21 @@ function getServedPath(appPackageJson) {
   return ensureSlash(servedUrl, true);
 }
 
+/**
+ * 扫描函数
+ */
+function Scan() {
+  const dirs = fs.readdirSync(resolveApp('src/'));
+  const map = {};
+  dirs.forEach((file) => {
+    const state = fs.statSync(resolveApp('src/' + file))
+    if (state.isDirectory()) {
+      map[file] = resolveApp('src/' + file) + '/index.js'
+    }
+  })
+  return map
+}
+const dirs = Scan();
 // config after eject: we're in ./config/
 module.exports = {
   dotenv: resolveApp('.env'),
@@ -45,7 +60,7 @@ module.exports = {
   appPublic: resolveApp('public'),
   appHtml: resolveApp('public/index.html'),
   appIndexJs: resolveApp('src/index.js'),
-  appIndexJs2: resolveApp('page2/index.js'),
+  appAdminJs: resolveApp('src/admin.js'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
   yarnLockFile: resolveApp('yarn.lock'),
@@ -53,4 +68,5 @@ module.exports = {
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
   servedPath: getServedPath(resolveApp('package.json')),
+  dirs
 };
