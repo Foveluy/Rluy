@@ -1,10 +1,11 @@
+import _Object$keys from 'babel-runtime/core-js/object/keys';
+import _objectWithoutProperties from 'babel-runtime/helpers/objectWithoutProperties';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import { fork, take, select, call, all, put } from 'redux-saga/effects';
-
 
 class Rluy {
     constructor() {
@@ -15,7 +16,9 @@ class Rluy {
     }
     *rootWatcher() {
         while (1) {
-            const { type, ...others } = yield take(this.actionStategy);
+            const _ref = yield take(this.actionStategy),
+                  { type } = _ref,
+                  others = _objectWithoutProperties(_ref, ['type']);
             const fn = this.effects[type];
             if (fn !== void 666) {
                 yield call(fn, { fork, take, select, call, put }, others);
@@ -23,9 +26,7 @@ class Rluy {
         }
     }
     *rootSaga() {
-        yield all([
-            fork(this.rootWatcher.bind(this))
-        ])
+        yield all([fork(this.rootWatcher.bind(this))]);
     }
 
     init() {
@@ -41,10 +42,10 @@ class Rluy {
             throw new SyntaxError(`模块${namespace}已经存在`);
         }
 
-        Object.keys(model.effects).forEach((key) => {
+        _Object$keys(model.effects).forEach(key => {
             this.actionStategy.push(key);
             this.effects[key] = model.effects[key];
-        })
+        });
 
         const modelState = model.state || {};
         const reducer = (state = modelState, { type, payload }) => {
@@ -53,20 +54,19 @@ class Rluy {
                 return func(state, { type, payload });
             }
             return state;
-        }
+        };
         this.appReducers[namespace] = reducer;
     }
 
     run(JsxElement, DOMNode) {
-        const store = createStore(combineReducers(this.appReducers), applyMiddleware(this.sagaMiddleware))
+        const store = createStore(combineReducers(this.appReducers), applyMiddleware(this.sagaMiddleware));
         this.sagaMiddleware.run(this.rootSaga.bind(this));
 
-        ReactDOM.render(
-            <Provider store={store}>
-                {JsxElement}
-            </Provider>,
-            DOMNode
-        );
+        ReactDOM.render(React.createElement(
+            Provider,
+            { store: store },
+            JsxElement
+        ), DOMNode);
     }
 }
 

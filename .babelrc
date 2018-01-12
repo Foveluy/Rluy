@@ -1,0 +1,21 @@
+// 新建.babelrc
+{
+    "env": {
+        "NODE_ENV": "production",
+        "BABEL_ENV": "production"
+    },
+    "presets": [
+        "react"
+        // 转译React组件为JS代码
+    ],
+    "plugins": [
+        "transform-runtime",
+        // "react-hot-loader/babel",
+        "transform-object-rest-spread",
+        [
+            "transform-react-jsx"
+        ],
+        "transform-flow-strip-types",
+        "syntax-flow"
+    ]
+}
