@@ -57,6 +57,17 @@ class Rluy {
         this.appReducers[namespace] = reducer;
     }
 
+    injectRun(JsxElement) {
+        const store = createStore(combineReducers(this.appReducers), applyMiddleware(this.sagaMiddleware))
+        this.sagaMiddleware.run(this.rootSaga.bind(this));
+
+        return (
+            <Provider store={store}>
+                {JsxElement}
+            </Provider>
+        )
+    }
+
     run(JsxElement, DOMNode) {
         const store = createStore(combineReducers(this.appReducers), applyMiddleware(this.sagaMiddleware))
         this.sagaMiddleware.run(this.rootSaga.bind(this));
