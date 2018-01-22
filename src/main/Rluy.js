@@ -12,6 +12,7 @@ class Rluy {
         this.appReducers = {};
         this.actionStategy = [];
         this.effects = {};
+        this.JsxElement = {};
     }
     *rootWatcher() {
         while (1) {
@@ -68,13 +69,18 @@ class Rluy {
         )
     }
 
-    run(JsxElement, DOMNode) {
+    router(RouterModel) {
+        const _RouterModel = RouterModel.default;
+        this.JsxElement = _RouterModel;
+    }
+
+    run(DOMNode) {
         const store = createStore(combineReducers(this.appReducers), applyMiddleware(this.sagaMiddleware))
         this.sagaMiddleware.run(this.rootSaga.bind(this));
 
         ReactDOM.render(
             <Provider store={store}>
-                {JsxElement}
+                {this.JsxElement}
             </Provider>,
             DOMNode
         );

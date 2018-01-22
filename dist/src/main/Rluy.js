@@ -13,6 +13,7 @@ class Rluy {
         this.appReducers = {};
         this.actionStategy = [];
         this.effects = {};
+        this.JsxElement = {};
     }
     *rootWatcher() {
         while (1) {
@@ -58,14 +59,30 @@ class Rluy {
         this.appReducers[namespace] = reducer;
     }
 
-    run(JsxElement, DOMNode) {
+    injectRun(JsxElement) {
+        const store = createStore(combineReducers(this.appReducers), applyMiddleware(this.sagaMiddleware));
+        this.sagaMiddleware.run(this.rootSaga.bind(this));
+
+        return React.createElement(
+            Provider,
+            { store: store },
+            JsxElement
+        );
+    }
+
+    router(RouterModel) {
+        const _RouterModel = RouterModel.default;
+        this.JsxElement = _RouterModel;
+    }
+
+    run(DOMNode) {
         const store = createStore(combineReducers(this.appReducers), applyMiddleware(this.sagaMiddleware));
         this.sagaMiddleware.run(this.rootSaga.bind(this));
 
         ReactDOM.render(React.createElement(
             Provider,
             { store: store },
-            JsxElement
+            this.JsxElement
         ), DOMNode);
     }
 }

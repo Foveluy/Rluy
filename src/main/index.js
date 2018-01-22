@@ -9,4 +9,5 @@ import Todolist from './views/todolist';
 
 app.init();
 app.model(require('./model/todolist'));
-app.run(<Todolist />, document.getElementById('root'));
+app.router(require('./views/todolist'));
+app.run(document.getElementById('root'));
