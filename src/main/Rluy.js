@@ -71,7 +71,7 @@ class Rluy {
 
     router(RouterModel) {
         const _RouterModel = RouterModel.default;
-        this.JsxElement = _RouterModel;
+        this.JsxElement = typeof _RouterModel === 'function' ? _RouterModel() : _RouterModel;
     }
 
     run(DOMNode) {
