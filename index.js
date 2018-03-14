@@ -1,3 +1,3 @@
-const Rluy = require('./dist/src/main/Rluy');
+const Rluy = require('./dist/src/Rluy');
 
 module.exports = Rluy.default;
