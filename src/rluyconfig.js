@@ -1,5 +1,5 @@
-import rluy from './Rluy'
+import Rluy from './Rluy'
 
-rluy.init()
+Rluy.init()
 
-export const Rluy = rluy
+export const App = Rluy

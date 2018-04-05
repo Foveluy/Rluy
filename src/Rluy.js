@@ -14,7 +14,7 @@ class Rluy {
         this.JsxElement = {}
         this.errorFn = void 666
     }
-    onError() {
+    onError(fn) {
         this.errorFn = fn
     }
 

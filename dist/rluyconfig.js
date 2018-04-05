@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Rluy = undefined;
+exports.App = undefined;
 
 var _Rluy = require('./Rluy');
 
@@ -13,4 +13,4 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _Rluy2.default.init();
 
-var Rluy = exports.Rluy = _Rluy2.default;
+var App = exports.App = _Rluy2.default;

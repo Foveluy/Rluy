@@ -58,13 +58,13 @@ var Rluy = function () {
 
     (0, _createClass3.default)(Rluy, [{
         key: 'onError',
-        value: function onError() {
+        value: function onError(fn) {
             this.errorFn = fn;
         }
     }, {
         key: 'rootWatcher',
         value: /*#__PURE__*/_regenerator2.default.mark(function rootWatcher() {
-            var _ref, type, others, _fn;
+            var _ref, type, others, fn;
 
             return _regenerator2.default.wrap(function rootWatcher$(_context) {
                 while (1) {
@@ -82,16 +82,16 @@ var Rluy = function () {
                             _ref = _context.sent;
                             type = _ref.type;
                             others = (0, _objectWithoutProperties3.default)(_ref, ['type']);
-                            _fn = this.effects[type];
+                            fn = this.effects[type];
 
-                            if (!(_fn !== void 666)) {
+                            if (!(fn !== void 666)) {
                                 _context.next = 16;
                                 break;
                             }
 
                             _context.prev = 8;
                             _context.next = 11;
-                            return (0, _effects.call)(_fn, { fork: _effects.fork, take: _effects.take, select: _effects.select, call: _effects.call, put: _effects.put }, others);
+                            return (0, _effects.call)(fn, { fork: _effects.fork, take: _effects.take, select: _effects.select, call: _effects.call, put: _effects.put }, others);
 
                         case 11:
                             _context.next = 16;
