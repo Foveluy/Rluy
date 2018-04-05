@@ -1,3 +1,3 @@
-const Rluy = require('./dist/src/Rluy');
+const Rluy = require('./dist/rluyconfig').Rluy
 
-module.exports = Rluy.default;
+module.exports = Rluy.default
