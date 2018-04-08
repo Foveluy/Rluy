@@ -42,10 +42,10 @@ class Rluy {
         const model = Module.default
         const namespace = model.namespace
         if (namespace === void 666) {
-            throw new SyntaxError('模块缺少命名空间')
+            throw new SyntaxError('module needs a namespace')
         }
         if (this.appReducers[namespace]) {
-            throw new SyntaxError(`模块${namespace}已经存在`)
+            throw new SyntaxError(`module for name '${namespace}' exist`)
         }
 
         Object.keys(model.effects).forEach(key => {
