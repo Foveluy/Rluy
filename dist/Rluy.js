@@ -48,6 +48,7 @@ var Rluy = function () {
     function Rluy() {
         (0, _classCallCheck3.default)(this, Rluy);
 
+        this.routingComponent = {};
         this.sagaMiddleware = {};
         this.appReducers = {};
         this.actionStategy = [];
@@ -144,10 +145,10 @@ var Rluy = function () {
             var model = Module.default;
             var namespace = model.namespace;
             if (namespace === void 666) {
-                throw new SyntaxError('模块缺少命名空间');
+                throw new SyntaxError('module needs a namespace');
             }
             if (this.appReducers[namespace]) {
-                throw new SyntaxError('\u6A21\u5757' + namespace + '\u5DF2\u7ECF\u5B58\u5728');
+                throw new SyntaxError('module for name \'' + namespace + '\' exist');
             }
 
             (0, _keys2.default)(model.effects).forEach(function (key) {
@@ -186,7 +187,7 @@ var Rluy = function () {
         key: 'router',
         value: function router(RouterModel) {
             var _RouterModel = RouterModel.default;
-            this.JsxElement = typeof _RouterModel === 'function' ? _RouterModel() : _RouterModel;
+            this.JsxElement = typeof _RouterModel === 'function' ? _RouterModel(this.routingComponent) : _RouterModel;
         }
     }, {
         key: 'run',

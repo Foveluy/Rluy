@@ -7,6 +7,7 @@ import { fork, take, select, call, all, put } from 'redux-saga/effects'
 
 class Rluy {
     constructor() {
+        this.routingComponent = {}
         this.sagaMiddleware = {}
         this.appReducers = {}
         this.actionStategy = []
@@ -65,10 +66,7 @@ class Rluy {
     }
 
     injectRun(JsxElement) {
-        const store = createStore(
-            combineReducers(this.appReducers),
-            applyMiddleware(this.sagaMiddleware)
-        )
+        const store = createStore(combineReducers(this.appReducers), applyMiddleware(this.sagaMiddleware))
         this.sagaMiddleware.run(this.rootSaga.bind(this))
 
         return <Provider store={store}>{JsxElement}</Provider>
@@ -76,21 +74,14 @@ class Rluy {
 
     router(RouterModel) {
         const _RouterModel = RouterModel.default
-        this.JsxElement =
-            typeof _RouterModel === 'function' ? _RouterModel() : _RouterModel
+        this.JsxElement = typeof _RouterModel === 'function' ? _RouterModel(this.routingComponent) : _RouterModel
     }
 
     run(DOMNode) {
-        const store = createStore(
-            combineReducers(this.appReducers),
-            applyMiddleware(this.sagaMiddleware)
-        )
+        const store = createStore(combineReducers(this.appReducers), applyMiddleware(this.sagaMiddleware))
         this.sagaMiddleware.run(this.rootSaga.bind(this))
 
-        ReactDOM.render(
-            <Provider store={store}>{this.JsxElement}</Provider>,
-            DOMNode
-        )
+        ReactDOM.render(<Provider store={store}>{this.JsxElement}</Provider>, DOMNode)
     }
 }
 

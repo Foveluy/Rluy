@@ -2,56 +2,55 @@ var path = require('path')
 var fs = require('fs')
 const chalk = require('chalk')
 
-const wrapper = source => {
-  return `_Rluy2.default.model(require("${source}"));\n`
+const wrapperModel = source => {
+    return `_Rluy2.default.model(require("${source}"));\n`
 }
 
-const wrapperLayout = (key, componentPath) => {
-  return `\n _Rluy2.default.routingComponent[${key}]=require("${componentPath}");\n`
+const wrapperLayout = (source, key) => {
+    return `\n _Rluy2.default.routingComponent["${key}"]=require("${source}").default;`
+}
+
+const CodeMerge = (path, wrapper) => {
+    const dirs = fs.readdirSync(path)
+
+    let src = dirs.reduce(function(pre, next, index) {
+        const prePath = path + pre
+        const nextPath = path + next
+        const key = dirs[index]
+
+        if (index === 1) {
+            return wrapper(prePath, dirs[0]) + wrapper(nextPath, key)
+        }
+        return pre + wrapper(nextPath, key)
+    })
+    if (dirs.length === 1) {
+        src = wrapper(path, dirs[0])
+    }
+
+    return src
 }
 
 module.exports = function(source) {
-  this.cacheable(false)
+    this.cacheable(false)
+    try {
+        var appPath = path.resolve('src/model')
+        var layoutPath = path.resolve('src/page')
 
-  console.log('先走到这里哦')
-  try {
-    var appPath = path.resolve('src/model')
-    var layoutPath = path.resolve('src/page')
-    const dirs = fs.readdirSync(appPath)
-    this.addContextDependency(appPath)
-    appPath = appPath + '/'
-    layoutPath = layoutPath + '/'
-    var src = fs.readdirSync(appPath).reduce(function(pre, next, index) {
-      const prePath = appPath + pre
-      const nextPath = appPath + next
-      if (index === 1) {
-        return wrapper(prePath) + wrapper(nextPath)
-      }
-      return wrapper(prePath)
-    })
+        this.addContextDependency(appPath)
+        this.addContextDependency(layoutPath)
+        appPath = appPath + '/'
+        layoutPath = layoutPath + '/'
 
-    var src2 = fs.readdirSync(layoutPath).reduce(function(pre, next, index) {
-      const prePath = layoutPath + pre
-      const nextPath = layoutPath + next
-      if (index === 1) {
-        return wrapperLayout(index, prePath) + wrapperLayout(index + '123', nextPath)
-      }
-      return pre+ wrapperLayout(index, nextPath)
-    })
+        var src = CodeMerge(appPath, wrapperModel)
+        var src2 = CodeMerge(layoutPath, wrapperLayout)
 
-    if (dirs.length === 1) {
-      src2 = wrapperLayout(1, layoutPath + src2)
-      src = wrapper(appPath + src)
+        console.log(chalk.green('adding pages...'))
+        console.log(chalk.green('adding module...'))
+        return source + '\n' + src + src2
+    } catch (e) {
+        console.log(chalk.red('please create a module folder in `{your app}/src/`'))
+        throw e
     }
 
-    console.log(chalk.green(src2))
-
-    console.log(chalk.green('adding module...'))
-    return source + '\n' + src + src2
-  } catch (e) {
-    console.log(chalk.red('please create a module folder in `{your app}/src/`'))
-    throw e
-  }
-
-  return source + '\n' + src
+    return source + '\n' + src
 }
