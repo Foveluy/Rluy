@@ -48,6 +48,7 @@ var Rluy = function () {
     function Rluy() {
         (0, _classCallCheck3.default)(this, Rluy);
 
+        this.isDebug = false;
         this.routingComponent = {};
         this.sagaMiddleware = {};
         this.appReducers = {};
@@ -55,6 +56,8 @@ var Rluy = function () {
         this.effects = {};
         this.JsxElement = {};
         this.errorFn = void 666;
+        this._store = null;
+        this.moduleFilename = {};
     }
 
     (0, _createClass3.default)(Rluy, [{
@@ -72,7 +75,7 @@ var Rluy = function () {
                     switch (_context.prev = _context.next) {
                         case 0:
                             if (!1) {
-                                _context.next = 18;
+                                _context.next = 19;
                                 break;
                             }
 
@@ -83,37 +86,41 @@ var Rluy = function () {
                             _ref = _context.sent;
                             type = _ref.type;
                             others = (0, _objectWithoutProperties3.default)(_ref, ['type']);
+
+                            if (this.isDebug) {
+                                console.info('[saga-action-types]:  ' + type + ' in file ' + this.moduleFilename[type] + '.js');
+                            }
                             fn = this.effects[type];
 
                             if (!(fn !== void 666)) {
-                                _context.next = 16;
+                                _context.next = 17;
                                 break;
                             }
 
-                            _context.prev = 8;
-                            _context.next = 11;
-                            return (0, _effects.call)(fn, { fork: _effects.fork, take: _effects.take, select: _effects.select, call: _effects.call, put: _effects.put }, others);
+                            _context.prev = 9;
+                            _context.next = 12;
+                            return (0, _effects.call)(fn, { fork: _effects.fork, take: _effects.take, select: _effects.select, call: _effects.call, put: _effects.put, race: _effects.race, takeEvery: _effects.takeEvery, takeLatest: _effects.takeLatest }, others);
 
-                        case 11:
-                            _context.next = 16;
+                        case 12:
+                            _context.next = 17;
                             break;
 
-                        case 13:
-                            _context.prev = 13;
-                            _context.t0 = _context['catch'](8);
+                        case 14:
+                            _context.prev = 14;
+                            _context.t0 = _context['catch'](9);
 
                             this.errorFn(_context.t0);
 
-                        case 16:
+                        case 17:
                             _context.next = 0;
                             break;
 
-                        case 18:
+                        case 19:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, rootWatcher, this, [[8, 13]]);
+            }, rootWatcher, this, [[9, 14]]);
         })
     }, {
         key: 'rootSaga',
@@ -139,11 +146,11 @@ var Rluy = function () {
         }
     }, {
         key: 'model',
-        value: function model(Module) {
+        value: function model(Module, filename) {
             var _this = this;
 
             var model = Module.default;
-            var namespace = model.namespace;
+            var namespace = filename.replace('.js', '');
             if (namespace === void 666) {
                 throw new SyntaxError('module needs a namespace');
             }
@@ -154,6 +161,7 @@ var Rluy = function () {
             (0, _keys2.default)(model.effects).forEach(function (key) {
                 _this.actionStategy.push(key);
                 _this.effects[key] = model.effects[key];
+                _this.moduleFilename[key] = filename;
             });
 
             var modelState = model.state || {};
@@ -191,10 +199,12 @@ var Rluy = function () {
         }
     }, {
         key: 'run',
-        value: function run(DOMNode) {
-            var store = (0, _redux.createStore)((0, _redux.combineReducers)(this.appReducers), (0, _redux.applyMiddleware)(this.sagaMiddleware));
-            this.sagaMiddleware.run(this.rootSaga.bind(this));
+        value: function run(DOMNode, isDebug) {
+            if (isDebug === true) this.isDebug = true;
 
+            var store = (0, _redux.createStore)((0, _redux.combineReducers)(this.appReducers), (0, _redux.applyMiddleware)(this.sagaMiddleware));
+            this._store = store;
+            this.sagaMiddleware.run(this.rootSaga.bind(this));
             _reactDom2.default.render(_react2.default.createElement(
                 _reactRedux.Provider,
                 { store: store },

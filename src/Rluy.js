@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
-import { fork, take, select, call, all, put } from 'redux-saga/effects'
+import { fork, take, select, call, all, put, race, takeEvery, takeLatest } from 'redux-saga/effects'
 
 class Rluy {
     constructor() {
+        this.isDebug = false
         this.routingComponent = {}
         this.sagaMiddleware = {}
         this.appReducers = {}
@@ -14,6 +15,8 @@ class Rluy {
         this.effects = {}
         this.JsxElement = {}
         this.errorFn = void 666
+        this._store = null
+        this.moduleFilename = {}
     }
     onError(fn) {
         this.errorFn = fn
@@ -22,10 +25,13 @@ class Rluy {
     *rootWatcher() {
         while (1) {
             const { type, ...others } = yield take(this.actionStategy)
+            if (this.isDebug) {
+                console.info(`[saga-action-types]:  ${type} in file ${this.moduleFilename[type]}.js`, )
+            }
             const fn = this.effects[type]
             if (fn !== void 666) {
                 try {
-                    yield call(fn, { fork, take, select, call, put }, others)
+                    yield call(fn, { fork, take, select, call, put, race, takeEvery, takeLatest }, others)
                 } catch (e) {
                     this.errorFn(e)
                 }
@@ -39,9 +45,9 @@ class Rluy {
     init() {
         this.sagaMiddleware = createSagaMiddleware(this.rootSaga)
     }
-    model(Module) {
+    model(Module, filename) {
         const model = Module.default
-        const namespace = model.namespace
+        const namespace = filename.replace('.js', '')
         if (namespace === void 666) {
             throw new SyntaxError('module needs a namespace')
         }
@@ -52,6 +58,7 @@ class Rluy {
         Object.keys(model.effects).forEach(key => {
             this.actionStategy.push(key)
             this.effects[key] = model.effects[key]
+            this.moduleFilename[key] = filename
         })
 
         const modelState = model.state || {}
@@ -77,10 +84,12 @@ class Rluy {
         this.JsxElement = typeof _RouterModel === 'function' ? _RouterModel(this.routingComponent) : _RouterModel
     }
 
-    run(DOMNode) {
-        const store = createStore(combineReducers(this.appReducers), applyMiddleware(this.sagaMiddleware))
-        this.sagaMiddleware.run(this.rootSaga.bind(this))
+    run(DOMNode, isDebug) {
+        if (isDebug === true) this.isDebug = true
 
+        const store = createStore(combineReducers(this.appReducers), applyMiddleware(this.sagaMiddleware))
+        this._store = store
+        this.sagaMiddleware.run(this.rootSaga.bind(this))
         ReactDOM.render(<Provider store={store}>{this.JsxElement}</Provider>, DOMNode)
     }
 }

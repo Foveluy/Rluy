@@ -2,8 +2,8 @@ var path = require('path')
 var fs = require('fs')
 const chalk = require('chalk')
 
-const wrapperModel = source => {
-    return `_Rluy2.default.model(require("${source}"));\n`
+const wrapperModel = (source, key, filename) => {
+    return `_Rluy2.default.model(require("${source}"),"${filename}");\n`
 }
 
 const wrapperLayout = (source, key) => {
@@ -19,9 +19,9 @@ const CodeMerge = (path, wrapper) => {
         const key = dirs[index]
 
         if (index === 1) {
-            return wrapper(prePath, dirs[0]) + wrapper(nextPath, key)
+            return wrapper(prePath, dirs[0], pre) + wrapper(nextPath, key, next)
         }
-        return pre + wrapper(nextPath, key)
+        return pre + wrapper(nextPath, key, next)
     })
     if (dirs.length === 1) {
         src = wrapper(path, dirs[0])
