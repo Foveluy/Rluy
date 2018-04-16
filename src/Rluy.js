@@ -26,7 +26,7 @@ class Rluy {
         while (1) {
             const { type, ...others } = yield take(this.actionStategy)
             if (this.isDebug) {
-                console.info(`[saga-action-types]:  ${type} in file ${this.moduleFilename[type]}.js`, )
+                console.info(`[saga-action-types]:  '${type}' in file '${this.moduleFilename[type]}'`,'payload:',others )
             }
             const fn = this.effects[type]
             if (fn !== void 666) {

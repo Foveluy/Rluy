@@ -88,7 +88,7 @@ var Rluy = function () {
                             others = (0, _objectWithoutProperties3.default)(_ref, ['type']);
 
                             if (this.isDebug) {
-                                console.info('[saga-action-types]:  ' + type + ' in file ' + this.moduleFilename[type] + '.js');
+                                console.info('[saga-action-types]:  \'' + type + '\' in file \'' + this.moduleFilename[type] + '\'', 'payload:', others);
                             }
                             fn = this.effects[type];
 
