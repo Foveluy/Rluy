@@ -47,11 +47,11 @@ App.onError(e => {
 //第二个参数：是否开启debug模式
 App.run(document.getElementById('root'),true)
 ```
-简单的三行代码，就已经完成了 App 启动，无需再写一堆 Redux,Connect，createStore等，比 DVA 更进一步的是，我们的 Router 和 Model 是根据文件自动加载的。
+简单的三行代码，就已经完成了 App 启动，无需再写一堆 Redux, Connect，createStore 等，比 DVA 更进一步的是，我们的 Router 和 Model 是根据文件自动加载的。
 
 ### router
 
-router 即是路由，在 Rluy 中，router是一个函数，require后，插入 ```App.router()``` 中
+router 即是路由，在 Rluy 中，router 是一个函数，require 后，插入 ```App.router()``` 中
 
 ```js
 //router.js
@@ -75,7 +75,7 @@ export default component => {
 
 ### model
 
-抄袭自 DVA ，其实我以前把它叫做 Container (容器)。Model 作为一个状态管理中心，管理了包括 effects(副作用)、state(初始化状态)、reducer(拆分的局部状态)，熟悉 DVA 的同学一定不陌生。
+抄袭自 DVA ，其实我以前把它叫做 Container (容器)。Model 作为一个状态管理中心，管理了包括 effects (副作用)、state (初始化状态)、reducer (拆分的局部状态)，熟悉 DVA 的同学一定不陌生。
 
 ```javascript
 //admin.js
@@ -118,7 +118,7 @@ export default connect(mapState)(RluyComponent)
 
 ### 自动加载机制
 
-要使用自动加载机制，我们必须得和 webpack 配合，在任意一个 webpack.config.js 中，引入 Rluy的配置
+要使用自动加载机制，我们必须得和 webpack 配合，在任意一个 webpack.config.js 中，引入 Rluy 的配置
 
 ```js
  module: {
@@ -135,7 +135,7 @@ export default connect(mapState)(RluyComponent)
 
 ```
 
-***值得注意的是，这个配置必须在babel-loader之前应用，否则不会生效***
+***值得注意的是，这个配置必须在 babel-loader之前应用，否则不会生效***
 
 
 
