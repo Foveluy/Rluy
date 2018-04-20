@@ -2,6 +2,11 @@
 
 一款极其轻量级的究极形态状态管理封装库，基于 Redux + Redux-saga
 
+# 安装
+```
+npm install --save rluy
+```
+
 # Rluy 概念
 
 Rluy 中有几个概念大家必须了解，否则你会觉得没头没脑
