@@ -6,8 +6,8 @@ const wrapperModel = (source, key, filename) => {
     return `_Rluy2.default.model(require("${source}"),"${filename}");\n`
 }
 
-const wrapperLayout = (source, key) => {
-    return `\n _Rluy2.default.routingComponent["${key}"]=require("${source}").default;`
+const wrapperLayout = (source, key, filename) => {
+    return `\n _Rluy2.default.routingComponent["${filename}"]=require("${source}").default;`
 }
 
 const CodeMerge = (path, wrapper) => {
