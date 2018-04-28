@@ -1,13 +1,14 @@
 var path = require('path')
 var fs = require('fs')
 const chalk = require('chalk')
+const { produceNamespace } = require('./src/util')
 
 const wrapperModel = (source, key, filename) => {
     return `_Rluy2.default.model(require("${source}"),"${filename}");\n`
 }
 
 const wrapperLayout = (source, key, filename) => {
-    const namespace = filename.replace(/\.js(x?)/, '')
+    const namespace = produceNamespace(filename)
     return `\n _Rluy2.default.routingComponent["${namespace}"]=require("${source}").default;`
 }
 
