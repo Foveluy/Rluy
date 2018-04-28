@@ -4,6 +4,8 @@
  * @return {string} namespace
  */
 
-export function produceNamespace(filename) {
+function produceNamespace(filename) {
   return filename.replace(/\.[j|t]s(x?)/, '')
 }
+
+exports.produceNamespace = produceNamespace
