@@ -7,7 +7,8 @@ const wrapperModel = (source, key, filename) => {
 }
 
 const wrapperLayout = (source, key, filename) => {
-    return `\n _Rluy2.default.routingComponent["${filename}"]=require("${source}").default;`
+    const namespace = filename.replace(/\.js(x?)/, '')
+    return `\n _Rluy2.default.routingComponent["${namespace}"]=require("${source}").default;`
 }
 
 const CodeMerge = (path, wrapper) => {
