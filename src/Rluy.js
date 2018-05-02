@@ -4,6 +4,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
 import { fork, take, select, call, all, put, race, takeEvery, takeLatest } from 'redux-saga/effects'
+import { produceNamespace } from './util'
 
 class Rluy {
     constructor() {
@@ -47,7 +48,7 @@ class Rluy {
     }
     model(Module, filename) {
         const model = Module.default
-        const namespace = filename.replace('.js', '')
+        const namespace = produceNamespace(filename)
         if (namespace === void 666) {
             throw new SyntaxError('module needs a namespace')
         }
