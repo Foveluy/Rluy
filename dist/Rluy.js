@@ -42,6 +42,8 @@ var _reduxSaga2 = _interopRequireDefault(_reduxSaga);
 
 var _effects = require('redux-saga/effects');
 
+var _util = require('./util');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Rluy = function () {
@@ -150,7 +152,7 @@ var Rluy = function () {
             var _this = this;
 
             var model = Module.default;
-            var namespace = filename.replace('.js', '');
+            var namespace = (0, _util.produceNamespace)(filename);
             if (namespace === void 666) {
                 throw new SyntaxError('module needs a namespace');
             }
